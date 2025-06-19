@@ -33,22 +33,15 @@ def wiener_attack(e, N):
     convergents = convergents_from_continued_fraction(fractions)
 
     for k, d_candidate in convergents:
-        # k adalah numerator, d_candidate adalah denominator dari k/d
-        # Wiener's attack mencari k/d sebagai konvergen dari e/N.
-        # k seharusnya tidak nol di sini, tetapi mari kita tambahkan pemeriksaan eksplisit.
         if d_candidate == 0:
             continue
         
-        # Tambahkan pemeriksaan k != 0 sebelum operasi modulo atau pembagian
-        if k == 0: # Jika k nol, ini adalah kasus yang tidak valid untuk mencari phi_N
+        if k == 0:
             continue
 
-        # Cek apakah (e * d_candidate - 1) habis dibagi k.
-        # Ini adalah bagian dari persamaan ed - k*phi(N) = 1
         if (e * d_candidate - 1) % k == 0:
             phi_N_candidate = (e * d_candidate - 1) // k
             
-            # ... (sisa logika validasi phi_N_candidate dan mencari p, q tetap sama) ...
             b_coeff = N - phi_N_candidate + 1
             discriminant = b_coeff**2 - 4 * N
             
@@ -79,7 +72,7 @@ if __name__ == "__main__":
         print(f"Private Key (d, N) = ({d_v}, {N_v})")
         print(f"Kondisi kerentanan d < N^(1/4) / 3: {d_v} < {N_v**(1/4)/3} -> {d_v < N_v**(1/4)/3}")
 
-        message_original = 42 # Contoh pesan (harus < N)
+        message_original = 42
         ciphertext = encrypt(message_original, public_key_vulnerable)
         decrypted_message = decrypt(ciphertext, private_key_vulnerable)
 
@@ -94,8 +87,6 @@ if __name__ == "__main__":
     # --- DEMONSTRASI WIENER'S ATTACK ---
     print(f"\n--- Demonstrasi Wiener's Attack ---")
     try:
-        # Gunakan kunci yang rentan dari bagian sebelumnya
-        # Pastikan public_key_vulnerable dan private_key_vulnerable terdefinisi
         if 'public_key_vulnerable' not in locals():
             print("Kunci rentan belum berhasil dibuat, tidak bisa melanjutkan serangan.")
         else:
@@ -110,14 +101,13 @@ if __name__ == "__main__":
                 print(f"Private exponent (d) asli: {d_v}")
                 print(f"Apakah d yang ditemukan cocok dengan d asli? {found_d == d_v}")
                 
-                # Verifikasi dengan dekripsi menggunakan d yang ditemukan
                 message_original = 42
                 ciphertext = encrypt(message_original, (e_v, N_v))
-                decrypted_with_found_d = decrypt(ciphertext, (found_d, N_v))
+                k = decrypt(ciphertext, (found_d, N_v))
                 
                 print(f"Pesan asli: {message_original}")
-                print(f"Pesan didekripsi menggunakan d yang ditemukan: {decrypted_with_found_d}")
-                print(f"Dekripsi dengan d yang ditemukan berhasil: {message_original == decrypted_with_found_d}")
+                print(f"Pesan didekripsi menggunakan d yang ditemukan: {k}")
+                print(f"Dekripsi dengan d yang ditemukan berhasil: {message_original == k}")
 
             else:
                 print("Serangan Wiener's tidak berhasil menemukan d (mungkin d tidak cukup kecil atau ada kesalahan).")

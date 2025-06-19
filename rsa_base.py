@@ -46,24 +46,20 @@ def generate_vulnerable_rsa_keys(p, q):
     N = p * q
     phi_N = (p - 1) * (q - 1)
 
-    # Hitung batas atas untuk d berdasarkan kondisi Wiener's Attack
     wiener_bound = N**(0.25) / 3
     
-    # Kita akan mencari d dalam rentang 3 hingga batas Wiener.
-    # Pastikan batas ini setidaknya 3 agar ada ruang untuk mencari d.
-    upper_bound = int(wiener_bound) 
-    
-    # Jika wiener_bound terlalu kecil (<3), maka tidak ada d yang valid.
-    if upper_bound_d_search < 3:
+    upper_bound = int(wiener_bound)
+
+    if upper_bound < 3:
         raise Exception(f"Dengan p={p} dan q={q}, N={N}, batas Wiener's Attack ({wiener_bound:.3f}) terlalu kecil. "
                         "Tidak dapat menemukan d yang valid untuk serangan Wiener. "
                         "Coba prima p dan q yang lebih besar.")
 
     d = None
 
-    for potential_d in range(3, upper_bound_d_search + 1):
-        if gcd(potential_d, phi_N) == 1:
-            d = potential_d
+    for k in range(3, upper_bound + 1):
+        if gcd(k, phi_N) == 1:
+            d = k
             break
     
     if d is None:

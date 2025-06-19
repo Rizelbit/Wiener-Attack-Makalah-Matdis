@@ -1,8 +1,8 @@
 import math
-from rsa_base import generate_vulnerable_rsa_keys, encrypt, decrypt # Import fungsi dari rsa_base
+from rsa_base import generate_vulnerable_rsa_keys, encrypt, decrypt
 
+"""Menghitung pecahan berlanjut dari numerator/denominator."""
 def continued_fraction_expansion(numerator, denominator):
-    """Menghitung pecahan berlanjut dari numerator/denominator."""
     fractions = []
     while denominator != 0:
         quotient = numerator // denominator
@@ -10,8 +10,8 @@ def continued_fraction_expansion(numerator, denominator):
         numerator, denominator = denominator, numerator % denominator
     return fractions
 
+"""Menghitung konvergen (aproksimasi rasional) dari pecahan berlanjut."""
 def convergents_from_continued_fraction(fractions):
-    """Menghitung konvergen (aproksimasi rasional) dari pecahan berlanjut."""
     convergents = []
     n0, d0 = 0, 1
     n1, d1 = 1, 0
@@ -24,11 +24,11 @@ def convergents_from_continued_fraction(fractions):
         n1, d1 = n, d
     return convergents
 
+"""
+Mencoba melakukan Wiener's Attack untuk menemukan d dari e dan N.
+Mengembalikan d yang ditemukan atau None jika serangan gagal.
+"""
 def wiener_attack(e, N):
-    """
-    Mencoba melakukan Wiener's Attack untuk menemukan d dari e dan N.
-    Mengembalikan d yang ditemukan atau None jika serangan gagal.
-    """
     fractions = continued_fraction_expansion(e, N)
     convergents = convergents_from_continued_fraction(fractions)
 

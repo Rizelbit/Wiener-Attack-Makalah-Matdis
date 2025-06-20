@@ -57,8 +57,8 @@ def wiener_attack(e, N):
 
 if __name__ == "__main__":
     # --- DEMONSTRASI GENERASI KUNCI DAN RSA SEDERHANA ---
-    p_vulnerable = 307 # Prima
-    q_vulnerable = 353 # Prima
+    p_vulnerable = 101 # Prima
+    q_vulnerable = 103 # Prima
 
     try:
         public_key_vulnerable, private_key_vulnerable = generate_vulnerable_rsa_keys(p_vulnerable, q_vulnerable)
